@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PITECH Feed</title>
+<style>
+/* --- BODY --- */
+body {
+    font-family: 'Roboto Mono', monospace;
+    margin: 0;
+    padding: 20px;
+    background: #F2F4F8;
+    color: #1F2937;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* --- TYTUŁ --- */
+h1 {
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 700;
+    font-size: 2.5rem;
+    text-align: center;
+    margin-bottom: 30px;
+    color: #0D9488;
+}
+
+/* --- POSTY NA KOMPUTERZE --- */
+.post {
+    background: #FFFFFF;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    max-width: 700px;
+    width: 100%;
+    height: auto; /* dopasowanie wysokości do treści */
+    box-shadow: 0 6px 20px rgba(0,0,0,0.1), 0 0 15px rgba(59,130,246,0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.post:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15), 0 0 25px rgba(59,130,246,0.15);
+}
+
+.post h2 {
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 600;
+    font-size: 1.6rem;
+    text-align: center;
+    color: #2563EB;
+    margin-bottom: 10px;
+}
+
+.post p {
+    text-align: center;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #1F2937;
+}
+
+.post small {
+    display: block;
+    text-align: center;
+    font-size: 0.85rem;
+    color: #2563EB;
+    margin-top: 10px;
+}
+
+.post img {
+    display: block;
+    margin: 15px auto 0 auto;
+    max-width: 100%;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* --- RESPONSYWNOŚĆ TELEFON --- */
+@media (max-width: 600px) {
+    body {
+        padding: 0;
+        align-items: stretch;
+    }
+
+    .post {
+        width: 100vw;
+        border-radius: 0;
+        margin: 0;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        /* wysokość pełnego ekranu ustawiana JS */
+        box-shadow: 
+            inset 20px 0 30px rgba(0,0,0,0.05),   /* lewy cień */
+            inset -20px 0 30px rgba(0,0,0,0.05),  /* prawy cień */
+            0 0 25px rgba(0,0,0,0.1);             /* lekki glow */
+    }
+
+    .post h2 {
+        font-size: 1.8rem;
+    }
+
+    .post p {
+        font-size: 1.05rem;
+    }
+
+    .post small {
+        font-size: 0.9rem;
+    }
+
+    .post img {
+        max-width: 90%;
+        max-height: 50%;
+        margin: 10px auto 0 auto;
+    }
+}
+</style>
+</head>
+<body>
+<!-- --- JS do pełnej wysokości postów na telefonie --- -->
+<script>
+function setPostHeight() {
+    const posts = document.querySelectorAll('.post');
+    const vh = window.innerHeight; // dokładna wysokość widocznego ekranu
+    posts.forEach(post => {
+        if(window.innerWidth <= 600){
+            post.style.height = `${vh}px`;
+        } else {
+            post.style.height = 'auto'; // komputer: dopasowanie do treści
+        }
+    });
+}
+
+// ustawiamy przy ładowaniu strony
+window.addEventListener('load', setPostHeight);
+
+// aktualizacja przy zmianie orientacji / resize
+window.addEventListener('resize', setPostHeight);
+window.addEventListener('orientationchange', setPostHeight);
+</script>
+
+</body>
+</head>
+<body>
+    <h1></h1>
+    {% for entry in entries %}
+        <div class="post">
+            <h2>{{ entry.title }}</h2>
+            <p>{{ entry.content }}</p>
+            {% if entry.image %}
+                <img src="{{ entry.image.url }}" alt="Obrazek wpisu">
+            {% endif %}
+            <small>{{ entry.created_at|date:"d M Y H:i" }}</small>
+        </div>
+    {% empty %}
+        <p>Brak wpisów. Dodaj coś powyżej.</p>
+    {% endfor %}
+</body>
+</html>
+
