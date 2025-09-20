@@ -151,9 +151,9 @@ window.addEventListener('orientationchange', setPostHeight);
         <div class="post">
             <h2>{{ entry.title }}</h2>
             <p>{{ entry.content }}</p>
-            {% if entry.image %}
-                <img src="{{ entry.image.url }}" alt="Obrazek wpisu">
-            {% endif %}
+            {% for img in entry.images.all %}
+            <img src="{{ img.image.url }}" alt="Obrazek wpisu">
+        {% endfor %}
             <small>{{ entry.created_at|date:"d M Y H:i" }}</small>
         </div>
     {% empty %}

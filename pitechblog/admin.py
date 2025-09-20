@@ -1,14 +1,11 @@
 from django.contrib import admin
-from .models import Entry
+from .models import Entry, EntryImage
 
-# Register models
-
-
-from django.contrib import admin
-from .models import Entry
+class EntryImageInline(admin.TabularInline):
+    model = EntryImage
+    extra = 3  # ile pustych pól obrazów pokazać
 
 @admin.register(Entry)
 class EntryAdmin(admin.ModelAdmin):
-    list_display = ('title', 'created_at')  # kolumny w panelu listy
-    list_filter = ('created_at',)          # filtr po dacie
-    search_fields = ('title', 'content')   # wyszukiwanie po tytule i treści
+    list_display = ('title', 'created_at')
+    inlines = [EntryImageInline]  # dodajemy inline
